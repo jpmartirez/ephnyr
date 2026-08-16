@@ -11,7 +11,7 @@ export function LandingSpecifications() {
 		<section id="specs" className="border-b border-zinc-200/80 bg-white py-24">
 			<div className="mx-auto max-w-5xl px-6">
 				<div className="mb-16">
-					<span className="font-mono text-xs font-semibold uppercase tracking-widest text-zinc-500">
+					<span className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
 						Engineering Specification
 					</span>
 					<h2 className="mt-2 text-3xl font-extrabold tracking-tight text-zinc-950">
@@ -29,7 +29,7 @@ export function LandingSpecifications() {
 								Enforced strictly via Supabase RLS and Next.js Server Actions.
 							</CardDescription>
 						</CardHeader>
-						<CardContent className="space-y-3 font-mono text-xs">
+						<CardContent className="space-y-3 text-xs">
 							<div className="flex items-center justify-between border-b border-zinc-200/80 pb-2">
 								<span className="text-zinc-600">Max Active Rooms</span>
 								<span className="font-bold text-zinc-950">3 Rooms / User</span>
@@ -60,7 +60,7 @@ export function LandingSpecifications() {
 								Public share links and isolation parameters.
 							</CardDescription>
 						</CardHeader>
-						<CardContent className="space-y-3 font-mono text-xs">
+						<CardContent className="space-y-3 text-xs">
 							<div className="flex items-center justify-between border-b border-zinc-200/80 pb-2">
 								<span className="text-zinc-600">Public Share URL</span>
 								<span className="font-bold text-zinc-950">/share/[slug]</span>

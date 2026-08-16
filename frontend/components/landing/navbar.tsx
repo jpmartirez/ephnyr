@@ -14,7 +14,7 @@ export function LandingNavbar({ onOpenAuthModal }: LandingNavbarProps) {
 				<div className="flex items-center gap-3">
 					<Link
 						href="/"
-						className="flex items-center gap-2 font-mono text-lg font-bold tracking-tighter text-zinc-950"
+						className="flex items-center gap-2 text-lg font-bold tracking-tighter text-zinc-950"
 					>
 						<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 text-xs font-bold text-white">
 							E
@@ -23,7 +23,7 @@ export function LandingNavbar({ onOpenAuthModal }: LandingNavbarProps) {
 					</Link>
 					<Badge
 						variant="outline"
-						className="hidden border-zinc-300 bg-zinc-100 font-mono text-[10px] text-zinc-600 sm:inline-flex"
+						className="hidden border-zinc-300 bg-zinc-100 text-[10px] font-medium text-zinc-600 sm:inline-flex"
 					>
 						v1.0 • RAG PLATFORM
 					</Badge>

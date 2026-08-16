@@ -11,7 +11,7 @@ export function LandingFeatures() {
 		<section id="features" className="border-b border-zinc-200/80 bg-white py-24">
 			<div className="mx-auto max-w-5xl px-6">
 				<div className="mb-16 text-center">
-					<h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-zinc-500">
+					<h2 className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
 						Engineering Core
 					</h2>
 					<p className="mt-2 text-3xl font-extrabold tracking-tight text-zinc-950 sm:text-4xl">
@@ -65,7 +65,7 @@ export function LandingFeatures() {
 							</CardTitle>
 							<CardDescription className="text-xs leading-relaxed text-zinc-600">
 								Deleting a room triggers a single PostgreSQL{" "}
-								<code className="font-mono text-[11px] text-zinc-900">
+								<code className="text-[11px] font-semibold text-zinc-900">
 									ON DELETE CASCADE
 								</code>{" "}
 								transaction that instantly wipes all documents, vector chunks, and

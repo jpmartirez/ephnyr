@@ -19,7 +19,7 @@ export default async function HomePage() {
 			<div className="flex flex-col items-center space-y-6 text-center">
 				<Badge
 					variant="outline"
-					className="border-emerald-200 bg-emerald-50 font-mono text-xs text-emerald-700"
+					className="border-emerald-200 bg-emerald-50 text-xs font-medium text-emerald-700"
 				>
 					● PROTECTED SESSION ACTIVE
 				</Badge>
@@ -28,7 +28,7 @@ export default async function HomePage() {
 					HomePage
 				</h1>
 
-				<p className="font-mono text-xs text-zinc-500">
+				<p className="text-xs text-zinc-500 font-medium">
 					Logged in as: <span className="font-bold text-zinc-900">{user.email}</span>
 				</p>
 

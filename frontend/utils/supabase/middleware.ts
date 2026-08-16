@@ -50,8 +50,8 @@ export async function updateSession(request: NextRequest) {
 		return NextResponse.redirect(url);
 	}
 
-	// Redirect authenticated user attempting to access auth page or ?auth= to /dashboard
-	if (user && (isAuthPage || authQuery)) {
+	
+	if (user && (path === "/" || isAuthPage || authQuery)) {
 		const url = request.nextUrl.clone();
 		url.pathname = "/dashboard";
 		url.searchParams.delete("auth");

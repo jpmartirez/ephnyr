@@ -81,7 +81,6 @@ export function AuthModal({
 					color: "#ef4444",
 					border: "1px border #27272a",
 					fontSize: "12px",
-					fontFamily: "var(--font-jetbrains-mono), monospace",
 				},
 			});
 		}
@@ -91,7 +90,7 @@ export function AuthModal({
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="max-w-md border-zinc-200 bg-white p-6 shadow-lg sm:max-w-md">
 				<DialogHeader className="flex flex-col items-center text-center">
-					<div className="flex items-center gap-2 font-mono text-xl font-bold tracking-tighter text-zinc-950">
+					<div className="flex items-center gap-2 text-xl font-bold tracking-tighter text-zinc-950">
 						<span className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-950 text-sm font-bold text-white">
 							E
 						</span>
@@ -129,7 +128,7 @@ export function AuthModal({
 					<TabsContent value="login" className="mt-4 space-y-4">
 						<form action={loginAction} className="space-y-4">
 							{loginState?.error && (
-								<div className="rounded-md border border-red-200 bg-red-50 p-3 font-mono text-xs text-red-600">
+								<div className="rounded-md border border-red-200 bg-red-50 p-3 text-xs text-red-600">
 									{loginState.error}
 								</div>
 							)}
@@ -137,7 +136,7 @@ export function AuthModal({
 							<div className="space-y-1.5">
 								<label
 									htmlFor="login-email"
-									className="font-mono text-xs font-medium text-zinc-700"
+									className="text-xs font-medium text-zinc-700"
 								>
 									Email Address
 								</label>
@@ -157,7 +156,7 @@ export function AuthModal({
 							<div className="space-y-1.5">
 								<label
 									htmlFor="login-password"
-									className="font-mono text-xs font-medium text-zinc-700"
+									className="text-xs font-medium text-zinc-700"
 								>
 									Password
 								</label>
@@ -189,13 +188,13 @@ export function AuthModal({
 					<TabsContent value="signup" className="mt-4 space-y-4">
 						<form action={signupAction} className="space-y-4">
 							{signupState?.error && (
-								<div className="rounded-md border border-red-200 bg-red-50 p-3 font-mono text-xs text-red-600">
+								<div className="rounded-md border border-red-200 bg-red-50 p-3 text-xs text-red-600">
 									{signupState.error}
 								</div>
 							)}
 
 							{signupState?.message && (
-								<div className="rounded-md border border-emerald-200 bg-emerald-50 p-3 font-mono text-xs text-emerald-700">
+								<div className="rounded-md border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-700">
 									{signupState.message}
 								</div>
 							)}
@@ -203,7 +202,7 @@ export function AuthModal({
 							<div className="space-y-1.5">
 								<label
 									htmlFor="signup-fullName"
-									className="font-mono text-xs font-medium text-zinc-700"
+									className="text-xs font-medium text-zinc-700"
 								>
 									Full Name
 								</label>
@@ -222,7 +221,7 @@ export function AuthModal({
 							<div className="space-y-1.5">
 								<label
 									htmlFor="signup-email"
-									className="font-mono text-xs font-medium text-zinc-700"
+									className="text-xs font-medium text-zinc-700"
 								>
 									Email Address
 								</label>
@@ -242,7 +241,7 @@ export function AuthModal({
 							<div className="space-y-1.5">
 								<label
 									htmlFor="signup-password"
-									className="font-mono text-xs font-medium text-zinc-700"
+									className="text-xs font-medium text-zinc-700"
 								>
 									Password
 								</label>

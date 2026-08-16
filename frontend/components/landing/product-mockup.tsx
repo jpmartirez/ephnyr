@@ -13,20 +13,20 @@ export function LandingProductMockup() {
 							<div className="h-3 w-3 rounded-full bg-zinc-300"></div>
 							<div className="h-3 w-3 rounded-full bg-zinc-300"></div>
 							<div className="h-3 w-3 rounded-full bg-zinc-300"></div>
-							<span className="ml-2 font-mono text-xs font-medium text-zinc-500">
+							<span className="ml-2 text-xs font-medium text-zinc-500">
 								ephnyr-pod // quantum-rag-research
 							</span>
 						</div>
 						<div className="flex items-center gap-2">
 							<Badge
 								variant="outline"
-								className="border-emerald-200 bg-emerald-50 font-mono text-[10px] text-emerald-700"
+								className="border-emerald-200 bg-emerald-50 text-[10px] font-medium text-emerald-700"
 							>
 								● PUBLIC LINK ACTIVE
 							</Badge>
 							<Badge
 								variant="outline"
-								className="border-zinc-300 bg-white font-mono text-[10px] text-zinc-600"
+								className="border-zinc-300 bg-white text-[10px] font-medium text-zinc-600"
 							>
 								2 / 3 ROOMS
 							</Badge>
@@ -38,10 +38,10 @@ export function LandingProductMockup() {
 						{/* Left Sidebar: Document Ingestion */}
 						<div className="border-r border-zinc-200 bg-zinc-50/40 p-4">
 							<div className="flex items-center justify-between pb-3">
-								<span className="font-mono text-xs font-semibold uppercase tracking-wider text-zinc-500">
+								<span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
 									Ingested Docs
 								</span>
-								<span className="font-mono text-xs text-zinc-400">
+								<span className="text-xs text-zinc-400">
 									3 Files (14.2 MB)
 								</span>
 							</div>
@@ -49,13 +49,13 @@ export function LandingProductMockup() {
 								<div className="flex items-center justify-between min-w-0 rounded-md border border-zinc-200 bg-white p-2.5 shadow-2xs">
 									<div className="flex items-center gap-2 min-w-0">
 										<FileText className="h-4 w-4 shrink-0 text-zinc-500" />
-										<span className="truncate font-mono text-xs text-zinc-800">
+										<span className="truncate text-xs text-zinc-800">
 											llama_3_3_architecture.pdf
 										</span>
 									</div>
 									<Badge
 										variant="secondary"
-										className="bg-zinc-100 font-mono text-[9px] text-zinc-600"
+										className="bg-zinc-100 text-[9px] font-medium text-zinc-600"
 									>
 										READY
 									</Badge>
@@ -63,13 +63,13 @@ export function LandingProductMockup() {
 								<div className="flex items-center justify-between min-w-0 rounded-md border border-zinc-200 bg-white p-2.5 shadow-2xs">
 									<div className="flex items-center gap-2 min-w-0">
 										<FileText className="h-4 w-4 shrink-0 text-zinc-500" />
-										<span className="truncate font-mono text-xs text-zinc-800">
+										<span className="truncate text-xs text-zinc-800">
 											vector_benchmarks.md
 										</span>
 									</div>
 									<Badge
 										variant="secondary"
-										className="bg-zinc-100 font-mono text-[9px] text-zinc-600"
+										className="bg-zinc-100 text-[9px] font-medium text-zinc-600"
 									>
 										READY
 									</Badge>
@@ -77,13 +77,13 @@ export function LandingProductMockup() {
 								<div className="flex items-center justify-between min-w-0 rounded-md border border-zinc-200 bg-white p-2.5 shadow-2xs">
 									<div className="flex items-center gap-2 min-w-0">
 										<FileText className="h-4 w-4 shrink-0 text-zinc-500" />
-										<span className="truncate font-mono text-xs text-zinc-800">
+										<span className="truncate text-xs text-zinc-800">
 											system_prompts.docx
 										</span>
 									</div>
 									<Badge
 										variant="secondary"
-										className="bg-zinc-100 font-mono text-[9px] text-zinc-600"
+										className="bg-zinc-100 text-[9px] font-medium text-zinc-600"
 									>
 										READY
 									</Badge>
@@ -91,7 +91,7 @@ export function LandingProductMockup() {
 							</div>
 
 							<div className="mt-6 rounded-md border border-dashed border-zinc-300 p-3 text-center">
-								<span className="font-mono text-[11px] text-zinc-500">
+								<span className="text-[11px] text-zinc-500">
 									Drag &amp; Drop PDF / MD / DOCX
 								</span>
 							</div>
@@ -110,12 +110,12 @@ export function LandingProductMockup() {
 							{/* Chat Message Bubble Assistant */}
 							<div className="mb-6 flex justify-start">
 								<div className="max-w-lg rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-xs leading-relaxed text-zinc-800">
-									<div className="mb-2 flex items-center gap-2 font-mono text-[10px] text-zinc-500">
+									<div className="mb-2 flex items-center gap-2 text-[10px] font-medium text-zinc-500">
 										<Sparkles className="h-3 w-3 text-zinc-700" />
 										<span>EPHNYR AI • GROQ LLAMA 3.3 70B</span>
 									</div>
 									Based on{" "}
-									<code className="rounded bg-zinc-200 px-1 py-0.5 font-mono text-[10px]">
+									<code className="rounded bg-zinc-200 px-1 py-0.5 text-[10px]">
 										vector_benchmarks.md
 									</code>{" "}
 									(Page 3), cosine similarity lookups using the HNSW index on
@@ -123,13 +123,13 @@ export function LandingProductMockup() {
 									, yielding an overall end-to-end TTFT under{" "}
 									<strong>460ms</strong>.
 									<div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-zinc-200/80 pt-2.5">
-										<span className="font-mono text-[10px] text-zinc-400">
+										<span className="text-[10px] text-zinc-400">
 											Sources:
 										</span>
-										<span className="rounded border border-zinc-200 bg-white px-2 py-0.5 font-mono text-[10px] text-zinc-600">
+										<span className="rounded border border-zinc-200 bg-white px-2 py-0.5 text-[10px] text-zinc-600">
 											📄 vector_benchmarks.md (p. 3)
 										</span>
-										<span className="rounded border border-zinc-200 bg-white px-2 py-0.5 font-mono text-[10px] text-zinc-600">
+										<span className="rounded border border-zinc-200 bg-white px-2 py-0.5 text-[10px] text-zinc-600">
 											📄 llama_3_3_architecture.pdf (p. 14)
 										</span>
 									</div>
