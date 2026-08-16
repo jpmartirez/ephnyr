@@ -1,20 +1,18 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-
-load_dotenv()
+from core.config import settings
+from api.v1.router import api_v1_router
 
 app = FastAPI(
-    title="Ephnyr AI Core API",
+    title=settings.PROJECT_NAME,
     description="FastAPI Backend Engine for Ephnyr Ephemeral Knowledge Pods",
-    version="0.1.0"
+    version=settings.VERSION
 )
 
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    os.getenv("FRONTEND_URL", "*")
+    settings.FRONTEND_URL
 ]
 
 app.add_middleware(
@@ -25,19 +23,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(api_v1_router)
+
 @app.get("/")
 def read_root():
     return {
         "status": "online",
-        "service": "Ephnyr AI Core Engine",
-        "version": "0.1.0"
-    }
-
-@app.get("/api/v1/health")
-def health_check():
-    return {
-        "status": "healthy",
-        "database": "supabase",
-        "llm_engine": "groq",
-        "embeddings": "fastembed (BAAI/bge-small-en-v1.5)"
+        "service": settings.PROJECT_NAME,
+        "version": settings.VERSION
     }
