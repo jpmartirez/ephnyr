@@ -109,23 +109,23 @@ export function AuthModal({
 					onValueChange={(val) => setActiveTab(val as "login" | "signup")}
 					className="mt-4 w-full"
 				>
-					<TabsList className="grid w-full grid-cols-2 bg-zinc-100 p-1">
+					<TabsList className="grid h-auto w-full grid-cols-2 gap-1.5 rounded-xl border border-zinc-200/80 bg-zinc-100 p-1.5">
 						<TabsTrigger
 							value="login"
-							className="text-xs font-medium data-active:bg-white data-active:text-zinc-950"
+							className="flex h-9 items-center justify-center rounded-lg px-3 text-xs font-medium transition-all data-active:bg-white data-active:text-zinc-950 data-active:shadow-xs"
 						>
 							Sign In
 						</TabsTrigger>
 						<TabsTrigger
 							value="signup"
-							className="text-xs font-medium data-active:bg-white data-active:text-zinc-950"
+							className="flex h-9 items-center justify-center rounded-lg px-3 text-xs font-medium transition-all data-active:bg-white data-active:text-zinc-950 data-active:shadow-xs"
 						>
 							Create Account
 						</TabsTrigger>
 					</TabsList>
 
 					{/* Sign In Tab */}
-					<TabsContent value="login" className="mt-4 space-y-4">
+					<TabsContent value="login" className="mt-5 space-y-4">
 						<form action={loginAction} className="space-y-4">
 							{loginState?.error && (
 								<div className="rounded-md border border-red-200 bg-red-50 p-3 text-xs text-red-600">
@@ -185,7 +185,7 @@ export function AuthModal({
 					</TabsContent>
 
 					{/* Create Account Tab */}
-					<TabsContent value="signup" className="mt-4 space-y-4">
+					<TabsContent value="signup" className="mt-5 space-y-4">
 						<form action={signupAction} className="space-y-4">
 							{signupState?.error && (
 								<div className="rounded-md border border-red-200 bg-red-50 p-3 text-xs text-red-600">
