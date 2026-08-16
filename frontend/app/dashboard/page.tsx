@@ -79,7 +79,7 @@ export default function DashboardPage() {
 							placeholder="Search rooms by title or description..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
-							className="border-zinc-200 pl-9 text-xs focus-visible:ring-zinc-950 bg-white"
+							className="border-zinc-200 bg-white pl-9 text-xs"
 						/>
 					</div>
 

@@ -148,7 +148,7 @@ export function AuthModal({
 										type="email"
 										required
 										placeholder="user@ephnyr.ai"
-										className="border-zinc-200 pl-9 text-xs focus-visible:ring-zinc-950"
+										className="border-zinc-200 pl-9 text-xs"
 									/>
 								</div>
 							</div>
@@ -168,7 +168,7 @@ export function AuthModal({
 										type="password"
 										required
 										placeholder="••••••••"
-										className="border-zinc-200 pl-9 text-xs focus-visible:ring-zinc-950"
+										className="border-zinc-200 pl-9 text-xs"
 									/>
 								</div>
 							</div>
@@ -213,7 +213,7 @@ export function AuthModal({
 										name="fullName"
 										type="text"
 										placeholder="Alex Mercer"
-										className="border-zinc-200 pl-9 text-xs focus-visible:ring-zinc-950"
+										className="border-zinc-200 pl-9 text-xs"
 									/>
 								</div>
 							</div>
@@ -233,7 +233,7 @@ export function AuthModal({
 										type="email"
 										required
 										placeholder="user@ephnyr.ai"
-										className="border-zinc-200 pl-9 text-xs focus-visible:ring-zinc-950"
+										className="border-zinc-200 pl-9 text-xs"
 									/>
 								</div>
 							</div>
@@ -253,7 +253,7 @@ export function AuthModal({
 										type="password"
 										required
 										placeholder="••••••••"
-										className="border-zinc-200 pl-9 text-xs focus-visible:ring-zinc-950"
+										className="border-zinc-200 pl-9 text-xs"
 									/>
 								</div>
 							</div>

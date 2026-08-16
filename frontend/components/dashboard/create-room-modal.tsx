@@ -69,7 +69,7 @@ export function CreateRoomModal({
 							placeholder="e.g. Llama 3.3 Architecture Notes"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
-							className="border-zinc-200 text-xs focus-visible:ring-zinc-950"
+							className="border-zinc-200 text-xs"
 						/>
 					</div>
 
@@ -83,7 +83,7 @@ export function CreateRoomModal({
 							placeholder="Brief overview of the documents stored in this room..."
 							value={description}
 							onChange={(e) => setDescription(e.target.value)}
-							className="border-zinc-200 text-xs focus-visible:ring-zinc-950"
+							className="border-zinc-200 text-xs"
 						/>
 					</div>
 
@@ -96,7 +96,7 @@ export function CreateRoomModal({
 							type="text"
 							value={systemPrompt}
 							onChange={(e) => setSystemPrompt(e.target.value)}
-							className="border-zinc-200 text-xs focus-visible:ring-zinc-950"
+							className="border-zinc-200 text-xs"
 						/>
 						<p className="text-[10px] text-zinc-400">
 							Directs LLM response behavior during similarity RAG queries.
