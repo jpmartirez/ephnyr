@@ -1,8 +1,11 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function LandingHero() {
+interface LandingHeroProps {
+	onOpenAuthModal?: (tab: "login" | "signup") => void;
+}
+
+export function LandingHero({ onOpenAuthModal }: LandingHeroProps) {
 	return (
 		<section className="relative overflow-hidden border-b border-zinc-200/80 bg-white py-24 md:py-32">
 			<div className="mx-auto max-w-5xl px-6 text-center">
@@ -24,15 +27,14 @@ export function LandingHero() {
 				</p>
 
 				<div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-					<Link href="/dashboard" className="w-full sm:w-auto">
-						<Button
-							size="lg"
-							className="h-12 w-full bg-zinc-950 px-7 text-base font-medium text-white shadow-md hover:bg-zinc-800 sm:w-auto"
-						>
-							Create Knowledge Pod
-							<ArrowRight className="ml-2 h-4 w-4" />
-						</Button>
-					</Link>
+					<Button
+						size="lg"
+						onClick={() => onOpenAuthModal?.("signup")}
+						className="h-12 w-full bg-zinc-950 px-7 text-base font-medium text-white shadow-md hover:bg-zinc-800 sm:w-auto"
+					>
+						Create Knowledge Pod
+						<ArrowRight className="ml-2 h-4 w-4" />
+					</Button>
 					<a href="#specs" className="w-full sm:w-auto">
 						<Button
 							size="lg"

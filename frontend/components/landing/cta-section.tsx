@@ -1,8 +1,11 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function LandingCtaSection() {
+interface LandingCtaSectionProps {
+	onOpenAuthModal?: (tab: "login" | "signup") => void;
+}
+
+export function LandingCtaSection({ onOpenAuthModal }: LandingCtaSectionProps) {
 	return (
 		<section id="ephemerality" className="bg-zinc-950 py-20 text-white">
 			<div className="mx-auto max-w-4xl px-6 text-center">
@@ -14,15 +17,14 @@ export function LandingCtaSection() {
 					latency, and purge everything when finished.
 				</p>
 				<div className="mt-8">
-					<Link href="/dashboard">
-						<Button
-							size="lg"
-							className="h-12 bg-white px-8 font-semibold text-zinc-950 hover:bg-zinc-200"
-						>
-							Launch Dashboard Now
-							<ArrowRight className="ml-2 h-4 w-4" />
-						</Button>
-					</Link>
+					<Button
+						size="lg"
+						onClick={() => onOpenAuthModal?.("signup")}
+						className="h-12 bg-white px-8 font-semibold text-zinc-950 hover:bg-zinc-200"
+					>
+						Launch Dashboard Now
+						<ArrowRight className="ml-2 h-4 w-4" />
+					</Button>
 				</div>
 			</div>
 		</section>
