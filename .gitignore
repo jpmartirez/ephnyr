@@ -1,0 +1,29 @@
+# Project Tracker & Masterplan
+Ephnyr_AI_Project_Masterplan.md
+progress-tracker.md
+
+# Dependencies & Environment
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Python & Virtualenv
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
