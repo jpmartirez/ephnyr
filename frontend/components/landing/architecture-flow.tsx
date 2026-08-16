@@ -8,7 +8,7 @@ export function LandingArchitectureFlow() {
 		>
 			<div className="mx-auto max-w-5xl px-6">
 				<div className="mb-16">
-					<span className="font-mono text-xs font-semibold uppercase tracking-widest text-zinc-500">
+					<span className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
 						System Data Flow
 					</span>
 					<h2 className="mt-2 text-3xl font-extrabold tracking-tight text-zinc-950">
@@ -19,11 +19,11 @@ export function LandingArchitectureFlow() {
 					</p>
 				</div>
 
-				<div className="space-y-4 font-mono text-xs">
+				<div className="space-y-4 text-xs font-medium">
 					{/* Step 1 */}
 					<div className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-5 md:flex-row md:items-center md:justify-between">
 						<div className="flex items-center gap-3">
-							<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 font-bold text-white">
+							<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 text-xs font-bold text-white">
 								01
 							</span>
 							<div>
@@ -38,7 +38,7 @@ export function LandingArchitectureFlow() {
 						</div>
 						<Badge
 							variant="outline"
-							className="w-fit border-zinc-300 bg-zinc-100 font-mono text-[10px] text-zinc-700"
+							className="w-fit border-zinc-300 bg-zinc-100 text-[10px] font-medium text-zinc-700"
 						>
 							JWT / Cookie RLS
 						</Badge>
@@ -47,7 +47,7 @@ export function LandingArchitectureFlow() {
 					{/* Step 2 */}
 					<div className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-5 md:flex-row md:items-center md:justify-between">
 						<div className="flex items-center gap-3">
-							<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 font-bold text-white">
+							<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 text-xs font-bold text-white">
 								02
 							</span>
 							<div>
@@ -62,7 +62,7 @@ export function LandingArchitectureFlow() {
 						</div>
 						<Badge
 							variant="outline"
-							className="w-fit border-zinc-300 bg-zinc-100 font-mono text-[10px] text-zinc-700"
+							className="w-fit border-zinc-300 bg-zinc-100 text-[10px] font-medium text-zinc-700"
 						>
 							PyPDF / FastEmbed
 						</Badge>
@@ -71,7 +71,7 @@ export function LandingArchitectureFlow() {
 					{/* Step 3 */}
 					<div className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-5 md:flex-row md:items-center md:justify-between">
 						<div className="flex items-center gap-3">
-							<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 font-bold text-white">
+							<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 text-xs font-bold text-white">
 								03
 							</span>
 							<div>
@@ -86,7 +86,7 @@ export function LandingArchitectureFlow() {
 						</div>
 						<Badge
 							variant="outline"
-							className="w-fit border-zinc-300 bg-zinc-100 font-mono text-[10px] text-zinc-700"
+							className="w-fit border-zinc-300 bg-zinc-100 text-[10px] font-medium text-zinc-700"
 						>
 							pgvector (HNSW)
 						</Badge>
@@ -95,7 +95,7 @@ export function LandingArchitectureFlow() {
 					{/* Step 4 */}
 					<div className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-5 md:flex-row md:items-center md:justify-between">
 						<div className="flex items-center gap-3">
-							<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 font-bold text-white">
+							<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 text-xs font-bold text-white">
 								04
 							</span>
 							<div>
@@ -110,7 +110,7 @@ export function LandingArchitectureFlow() {
 						</div>
 						<Badge
 							variant="outline"
-							className="w-fit border-zinc-300 bg-zinc-100 font-mono text-[10px] text-zinc-700"
+							className="w-fit border-zinc-300 bg-zinc-100 text-[10px] font-medium text-zinc-700"
 						>
 							Groq LPU / LCEL
 						</Badge>
