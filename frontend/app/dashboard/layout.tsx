@@ -16,8 +16,17 @@ export default async function DashboardLayout({
 		redirect("/?auth=login");
 	}
 
+	// Fetch initial room count for authenticated user
+	const { count } = await supabase
+		.from("rooms")
+		.select("*", { count: "exact", head: true })
+		.eq("user_id", user.id);
+
 	return (
-		<DashboardClientWrapper userEmail={user.email || "user@ephnyr.ai"}>
+		<DashboardClientWrapper
+			userEmail={user.email || "user@ephnyr.ai"}
+			initialActiveRooms={count || 0}
+		>
 			{children}
 		</DashboardClientWrapper>
 	);

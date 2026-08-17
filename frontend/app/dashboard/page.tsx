@@ -3,6 +3,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, Search, FolderPlus, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,8 @@ import {
 import { getUserRooms, createRoom, deleteRoom } from "@/actions/rooms";
 
 export default function DashboardPage() {
-	const { toggleMobileSidebar } = useDashboard();
+	const router = useRouter();
+	const { toggleMobileSidebar, setActiveRooms } = useDashboard();
 	const [rooms, setRooms] = useState<RoomItem[]>([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -35,10 +37,11 @@ export default function DashboardPage() {
 					description: r.description || "",
 					slug: r.slug,
 					is_public: r.is_public ?? true,
-					docCount: r.docCount || 0,
+					docCount: r.docCount ?? (r as any).doc_count ?? 0,
 					created_at: r.created_at ? new Date(r.created_at).toLocaleDateString() : "Recently",
 				}));
 				setRooms(mapped);
+				setActiveRooms(mapped.length);
 			} else if (res.error) {
 				toast.error(res.error);
 			}
@@ -47,7 +50,7 @@ export default function DashboardPage() {
 		} finally {
 			setIsLoading(false);
 		}
-	}, []);
+	}, [setActiveRooms]);
 
 	useEffect(() => {
 		fetchRooms();
@@ -153,7 +156,7 @@ export default function DashboardPage() {
 								key={room.id}
 								room={room}
 								onDelete={handleDeleteRoom}
-								onOpen={(r) => console.log("Open room:", r.name)}
+								onOpen={(r) => router.push(`/dashboard/room/${r.id}`)}
 							/>
 						))}
 					</div>

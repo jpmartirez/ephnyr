@@ -84,9 +84,31 @@ export async function getUserRooms(): Promise<RoomsResult> {
 		return { success: false, rooms: [], total: 0, max_allowed: 3, error: error.message };
 	}
 
+	// Fetch document counts per room in fallback
+	const roomIds = (data || []).map((r) => r.id);
+	const docCounts: Record<string, number> = {};
+
+	if (roomIds.length > 0) {
+		const { data: docs } = await supabase
+			.from("documents")
+			.select("room_id")
+			.in("room_id", roomIds);
+
+		(docs || []).forEach((d) => {
+			if (d.room_id) {
+				docCounts[d.room_id] = (docCounts[d.room_id] || 0) + 1;
+			}
+		});
+	}
+
+	const roomsWithDocs = (data || []).map((r) => ({
+		...r,
+		docCount: docCounts[r.id] || 0,
+	}));
+
 	return {
 		success: true,
-		rooms: data || [],
+		rooms: roomsWithDocs,
 		total: count || (data ? data.length : 0),
 		max_allowed: 3,
 	};
@@ -224,4 +246,100 @@ export async function deleteRoom(roomId: string) {
 
 	revalidatePath("/dashboard");
 	return { success: true };
+}
+
+/**
+ * Fetch a single Knowledge Pod (Room) by ID.
+ */
+export async function getRoomById(roomId: string): Promise<{ success: boolean; room?: RoomData; error?: string }> {
+	const supabase = createClient();
+	const {
+		data: { session },
+	} = await supabase.auth.getSession();
+
+	if (!session?.access_token) {
+		return { success: false, error: "Unauthorized session." };
+	}
+
+	try {
+		const res = await fetch(`${BACKEND_URL}/rooms/${roomId}`, {
+			method: "GET",
+			headers: {
+				Authorization: `Bearer ${session.access_token}`,
+				"Content-Type": "application/json",
+			},
+			cache: "no-store",
+		});
+
+		if (res.ok) {
+			const data = await res.json();
+			return { success: true, room: data };
+		}
+	} catch (e) {
+		console.warn("FastAPI get room by ID failed, falling back to direct Supabase query:", e);
+	}
+
+	// Supabase direct fallback
+	const { data, error } = await supabase
+		.from("rooms")
+		.select("*")
+		.eq("id", roomId)
+		.single();
+
+	if (error || !data) {
+		return { success: false, error: error?.message || "Room not found." };
+	}
+
+	return { success: true, room: data };
+}
+
+/**
+ * Update room metadata (name, description, is_public, system_prompt).
+ */
+export async function updateRoom(
+	roomId: string,
+	payload: { name?: string; description?: string; is_public?: boolean; system_prompt?: string }
+) {
+	const supabase = createClient();
+	const {
+		data: { session },
+	} = await supabase.auth.getSession();
+
+	if (!session?.access_token) {
+		return { success: false, error: "Unauthorized session." };
+	}
+
+	try {
+		const res = await fetch(`${BACKEND_URL}/rooms/${roomId}`, {
+			method: "PATCH",
+			headers: {
+				Authorization: `Bearer ${session.access_token}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(payload),
+		});
+
+		if (res.ok) {
+			const data = await res.json();
+			revalidatePath(`/dashboard/room/${roomId}`);
+			revalidatePath("/dashboard");
+			return { success: true, room: data };
+		}
+	} catch (e) {
+		console.warn("FastAPI update room failed, attempting direct Supabase update:", e);
+	}
+
+	// Direct Supabase fallback update
+	const { data, error } = await supabase
+		.from("rooms")
+		.update(payload)
+		.eq("id", roomId)
+		.select()
+		.single();
+
+	if (error) return { success: false, error: error.message };
+
+	revalidatePath(`/dashboard/room/${roomId}`);
+	revalidatePath("/dashboard");
+	return { success: true, room: data };
 }

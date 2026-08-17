@@ -5,6 +5,8 @@ import { DashboardSidebar } from "@/components/dashboard/sidebar";
 
 interface DashboardContextType {
 	isMobileSidebarOpen: boolean;
+	activeRooms: number;
+	setActiveRooms: (count: number) => void;
 	openMobileSidebar: () => void;
 	closeMobileSidebar: () => void;
 	toggleMobileSidebar: () => void;
@@ -12,6 +14,8 @@ interface DashboardContextType {
 
 const DashboardContext = createContext<DashboardContextType>({
 	isMobileSidebarOpen: false,
+	activeRooms: 0,
+	setActiveRooms: () => {},
 	openMobileSidebar: () => {},
 	closeMobileSidebar: () => {},
 	toggleMobileSidebar: () => {},
@@ -22,13 +26,16 @@ export const useDashboard = () => useContext(DashboardContext);
 interface DashboardClientWrapperProps {
 	children: React.ReactNode;
 	userEmail: string;
+	initialActiveRooms?: number;
 }
 
 export function DashboardClientWrapper({
 	children,
 	userEmail,
+	initialActiveRooms = 0,
 }: DashboardClientWrapperProps) {
 	const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+	const [activeRooms, setActiveRooms] = useState(initialActiveRooms);
 
 	const openMobileSidebar = () => setIsMobileSidebarOpen(true);
 	const closeMobileSidebar = () => setIsMobileSidebarOpen(false);
@@ -38,6 +45,8 @@ export function DashboardClientWrapper({
 		<DashboardContext.Provider
 			value={{
 				isMobileSidebarOpen,
+				activeRooms,
+				setActiveRooms,
 				openMobileSidebar,
 				closeMobileSidebar,
 				toggleMobileSidebar,
@@ -47,6 +56,8 @@ export function DashboardClientWrapper({
 				{/* Responsive Left Navigation Sidebar */}
 				<DashboardSidebar
 					userEmail={userEmail}
+					activeRooms={activeRooms}
+					maxRooms={3}
 					isOpen={isMobileSidebarOpen}
 					onClose={closeMobileSidebar}
 				/>

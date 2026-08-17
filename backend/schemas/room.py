@@ -21,6 +21,7 @@ class RoomResponse(RoomBase):
     id: str
     user_id: str
     slug: str
+    doc_count: int = 0
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 

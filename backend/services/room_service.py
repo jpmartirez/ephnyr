@@ -64,12 +64,34 @@ class RoomService:
         if not isinstance(first_item, dict):
             raise EphnyrException(status_code=500, detail="Invalid room response payload.")
 
-        return RoomResponse(**first_item)
+        item_dict = dict(first_item)
+        item_dict["doc_count"] = 0
+        return RoomResponse(**item_dict)
 
     async def get_user_rooms(self, user_id: str) -> RoomListResponse:
         response = self.supabase.table("rooms").select("*").eq("user_id", user_id).order("created_at", desc=True).execute()
         raw_rooms = response.data if isinstance(response.data, list) else []
-        rooms = [RoomResponse(**row) for row in raw_rooms if isinstance(row, dict)]
+
+        # Count documents per room
+        room_ids = [str(r["id"]) for r in raw_rooms if isinstance(r, dict) and "id" in r]
+        doc_count_map: Dict[str, int] = {}
+
+        if room_ids:
+            docs_res = self.supabase.table("documents").select("room_id").in_("room_id", room_ids).execute()
+            if docs_res.data and isinstance(docs_res.data, list):
+                for doc in docs_res.data:
+                    if isinstance(doc, dict) and "room_id" in doc:
+                        rid = str(doc["room_id"])
+                        doc_count_map[rid] = doc_count_map.get(rid, 0) + 1
+
+        rooms = []
+        for row in raw_rooms:
+            if isinstance(row, dict):
+                row_copy = dict(row)
+                rid = str(row_copy.get("id"))
+                row_copy["doc_count"] = doc_count_map.get(rid, 0)
+                rooms.append(RoomResponse(**row_copy))
+
         return RoomListResponse(
             total=len(rooms),
             max_allowed=settings.FREE_TIER_MAX_ROOMS,
@@ -85,14 +107,22 @@ class RoomService:
         data = response.data
         if not data or not isinstance(data, dict):
             raise ResourceNotFoundException(f"Room {room_id} not found or unauthorized.")
-        return RoomResponse(**data)
+        
+        data_copy = dict(data)
+        docs_res = self.supabase.table("documents").select("id", count="exact").eq("room_id", room_id).execute()
+        data_copy["doc_count"] = docs_res.count or 0
+        return RoomResponse(**data_copy)
 
     async def get_room_by_slug(self, slug: str) -> RoomResponse:
         response = self.supabase.table("rooms").select("*").eq("slug", slug).single().execute()
         data = response.data
         if not data or not isinstance(data, dict):
             raise ResourceNotFoundException(f"Room with slug '{slug}' not found.")
-        return RoomResponse(**data)
+        
+        data_copy = dict(data)
+        docs_res = self.supabase.table("documents").select("id", count="exact").eq("room_id", str(data_copy.get("id"))).execute()
+        data_copy["doc_count"] = docs_res.count or 0
+        return RoomResponse(**data_copy)
 
     async def delete_room(self, room_id: str, user_id: str) -> bool:
         # Verify ownership
