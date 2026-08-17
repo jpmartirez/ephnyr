@@ -117,12 +117,12 @@ export async function uploadDocument(roomId: string, formData: FormData) {
 		return { success: false, error: "No file provided for upload." };
 	}
 
-	// 1. Client & Server 10MB per file limit validation
-	const maxBytesPerFile = 10 * 1024 * 1024; // 10MB
+	// 1. Client & Server 5MB per file limit validation
+	const maxBytesPerFile = 5 * 1024 * 1024; // 5MB
 	if (file.size > maxBytesPerFile) {
 		return {
 			success: false,
-			error: `File size (${(file.size / (1024 * 1024)).toFixed(2)} MB) exceeds the maximum allowed limit of 10 MB per file.`,
+			error: `File size (${(file.size / (1024 * 1024)).toFixed(2)} MB) exceeds the maximum allowed limit of 5 MB per file.`,
 		};
 	}
 
@@ -139,6 +139,24 @@ export async function uploadDocument(roomId: string, formData: FormData) {
 		return {
 			success: false,
 			error: "Invalid file type. Only PDF, DOCX, TXT, and Markdown (.md) files are accepted.",
+		};
+	}
+
+	// 2b. Enforce 10MB total room storage cap
+	const { data: existingDocs } = await supabase
+		.from("documents")
+		.select("file_size_bytes")
+		.eq("room_id", roomId);
+
+	const existingTotalBytes = (existingDocs || []).reduce(
+		(acc, d) => acc + (Number(d.file_size_bytes) || 0),
+		0
+	);
+
+	if (existingTotalBytes + file.size > 10 * 1024 * 1024) {
+		return {
+			success: false,
+			error: `Total room storage cap of 10 MB exceeded (Current: ${(existingTotalBytes / (1024 * 1024)).toFixed(2)} MB). Delete existing documents to free up space.`,
 		};
 	}
 

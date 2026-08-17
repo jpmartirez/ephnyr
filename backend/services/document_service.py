@@ -13,7 +13,7 @@ class DocumentService:
         self.supabase = get_supabase_admin()
 
     async def register_document(self, user_id: str, doc_in: DocumentCreate) -> DocumentResponse:
-        # 1. Enforce 10MB per file limit
+        # 1. Enforce 5MB per file limit
         max_bytes_per_file = settings.FREE_TIER_MAX_FILE_SIZE_MB * 1024 * 1024
         if doc_in.file_size_bytes > max_bytes_per_file:
             raise QuotaExceededException(
@@ -21,7 +21,7 @@ class DocumentService:
                 f"the max limit of {settings.FREE_TIER_MAX_FILE_SIZE_MB} MB per file."
             )
 
-        # 2. Enforce 30MB total room storage limit
+        # 2. Enforce 10MB total room storage limit
         docs_response = self.supabase.table("documents").select("file_size_bytes").eq("room_id", doc_in.room_id).execute()
         raw_docs = docs_response.data if isinstance(docs_response.data, list) else []
         existing_total_bytes = sum(

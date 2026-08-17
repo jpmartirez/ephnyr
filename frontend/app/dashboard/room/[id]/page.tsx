@@ -130,9 +130,9 @@ export default function RoomDetailPage() {
 		if (!files || files.length === 0) return;
 
 		const file = files[0];
-		// Validate Max 10MB per file client-side
-		if (file.size > 10 * 1024 * 1024) {
-			toast.error(`File size (${(file.size / (1024 * 1024)).toFixed(2)} MB) exceeds 10 MB limit.`);
+		// Validate Max 5MB per file client-side
+		if (file.size > 5 * 1024 * 1024) {
+			toast.error(`File size (${(file.size / (1024 * 1024)).toFixed(2)} MB) exceeds 5 MB limit.`);
 			return;
 		}
 
@@ -213,7 +213,7 @@ export default function RoomDetailPage() {
 
 	// Storage calculations
 	const usedMb = (totalSizeBytes / (1024 * 1024)).toFixed(2);
-	const storagePercentage = Math.min(100, (totalSizeBytes / (30 * 1024 * 1024)) * 100);
+	const storagePercentage = Math.min(100, (totalSizeBytes / (10 * 1024 * 1024)) * 100);
 
 	if (isLoading) {
 		return (
@@ -301,7 +301,7 @@ export default function RoomDetailPage() {
 							Room Storage Quota
 						</span>
 						<span className="text-zinc-600">
-							<strong>{usedMb} MB</strong> / 30 MB
+							<strong>{usedMb} MB</strong> / 10 MB
 						</span>
 					</div>
 					<div className="mt-2.5 h-2 w-full overflow-hidden rounded-full bg-zinc-100">
@@ -313,7 +313,7 @@ export default function RoomDetailPage() {
 						/>
 					</div>
 					<div className="mt-2 flex items-center justify-between text-[11px] text-zinc-500">
-						<span>Max single file size: 10 MB</span>
+						<span>Max single file size: 5 MB</span>
 						<span>Accepted types: PDF, DOCX, TXT, MD</span>
 					</div>
 				</div>

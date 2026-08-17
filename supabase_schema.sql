@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS public.users (
     full_name VARCHAR(255),
     plan_tier VARCHAR(50) DEFAULT 'FREE',
     max_rooms INT DEFAULT 3,
-    max_file_size_mb INT DEFAULT 10,
+    max_file_size_mb INT DEFAULT 5,
+    max_room_storage_mb INT DEFAULT 10,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

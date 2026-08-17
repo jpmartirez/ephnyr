@@ -101,7 +101,8 @@ class ChatService:
             "STRICT GROUNDING DIRECTIVES:\n"
             "1. Answer the user's query accurately using ONLY the context from ingested documents provided below.\n"
             "2. If the context does not contain enough information to answer, state clearly: 'I could not find relevant information in the uploaded documents to answer your question.'\n"
-            "3. Do not make up facts or use outside knowledge not supported by the context.\n\n"
+            "3. Do not make up facts or use outside knowledge not supported by the context.\n"
+            "4. Do not use raw Markdown formatting symbols like asterisks (**) or (*) in your output. Present your response using clean plain text formatting with clear line breaks.\n\n"
             f"INGESTED DOCUMENT CONTEXT:\n---\n{context_str}\n---"
         )
 

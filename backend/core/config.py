@@ -24,7 +24,7 @@ class Settings(BaseModel):
     
     # Free Tier Quotas & Constraints (from Masterplan)
     FREE_TIER_MAX_ROOMS: int = 3
-    FREE_TIER_MAX_FILE_SIZE_MB: int = 10
-    FREE_TIER_MAX_ROOM_STORAGE_MB: int = 30
+    FREE_TIER_MAX_FILE_SIZE_MB: int = 5
+    FREE_TIER_MAX_ROOM_STORAGE_MB: int = 10
 
 settings = Settings()
