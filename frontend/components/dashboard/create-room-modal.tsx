@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Globe, Lock, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronDown, Globe, Lock, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -26,6 +26,7 @@ export function CreateRoomModal({
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [isPublic, setIsPublic] = useState(true);
+	const [showAdvanced, setShowAdvanced] = useState(false);
 	const [systemPrompt, setSystemPrompt] = useState(
 		"You are an AI assistant strictly grounded on the provided context."
 	);
@@ -36,6 +37,7 @@ export function CreateRoomModal({
 		onSubmitPreview?.(name, description);
 		setName("");
 		setDescription("");
+		setShowAdvanced(false);
 		onOpenChange(false);
 	};
 
@@ -87,22 +89,6 @@ export function CreateRoomModal({
 						/>
 					</div>
 
-					<div className="space-y-1.5">
-						<label htmlFor="system-prompt" className="text-xs font-medium text-zinc-700">
-							System Grounding Prompt
-						</label>
-						<Input
-							id="system-prompt"
-							type="text"
-							value={systemPrompt}
-							onChange={(e) => setSystemPrompt(e.target.value)}
-							className="border-zinc-200 text-xs"
-						/>
-						<p className="text-[10px] text-zinc-400">
-							Directs LLM response behavior during similarity RAG queries.
-						</p>
-					</div>
-
 					<div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
 						<div className="flex items-center justify-between">
 							<div className="flex items-center gap-2">
@@ -132,6 +118,44 @@ export function CreateRoomModal({
 								Toggle
 							</Button>
 						</div>
+					</div>
+
+					{/* Optional Advanced Settings Accordion */}
+					<div className="pt-1">
+						<button
+							type="button"
+							onClick={() => setShowAdvanced(!showAdvanced)}
+							className="flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 transition-colors"
+						>
+							<Settings2 className="h-3.5 w-3.5" />
+							<span>Advanced Settings</span>
+							<ChevronDown
+								className={`h-3.5 w-3.5 transition-transform ${
+									showAdvanced ? "rotate-180" : ""
+								}`}
+							/>
+						</button>
+
+						{showAdvanced && (
+							<div className="mt-3 space-y-1.5 rounded-lg border border-zinc-200 bg-zinc-50/60 p-3">
+								<label
+									htmlFor="system-prompt"
+									className="text-xs font-medium text-zinc-700"
+								>
+									System Grounding Prompt
+								</label>
+								<Input
+									id="system-prompt"
+									type="text"
+									value={systemPrompt}
+									onChange={(e) => setSystemPrompt(e.target.value)}
+									className="border-zinc-200 text-xs bg-white"
+								/>
+								<p className="text-[10px] text-zinc-400">
+									Directs LLM response behavior during RAG similarity queries.
+								</p>
+							</div>
+						)}
 					</div>
 
 					<div className="flex items-center justify-end gap-3 pt-2">
