@@ -4,6 +4,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { Bot, Sparkles, ShieldAlert } from "lucide-react";
@@ -137,9 +138,13 @@ export default function ChatbotSharePage() {
 		return (
 			<div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 font-sans">
 				<div className="flex flex-col items-center gap-3">
-					<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-950 text-white font-bold animate-pulse">
-						E
-					</div>
+					<Image
+						src="/EphnyrLogo.png"
+						alt="Ephnyr Logo"
+						width={40}
+						height={40}
+						className="h-10 w-auto object-contain animate-pulse"
+					/>
 					<p className="text-xs font-medium text-zinc-500">Loading Knowledge Pod Chatbot...</p>
 				</div>
 			</div>

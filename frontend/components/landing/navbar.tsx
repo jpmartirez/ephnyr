@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,9 +17,13 @@ export function LandingNavbar({ onOpenAuthModal }: LandingNavbarProps) {
 						href="/"
 						className="flex items-center gap-2 text-lg font-bold tracking-tighter text-zinc-950"
 					>
-						<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 text-xs font-bold text-white">
-							E
-						</span>
+						<Image
+							src="/EphnyrLogo.png"
+							alt="Ephnyr Logo"
+							width={28}
+							height={28}
+							className="h-7 w-auto object-contain"
+						/>
 						EPHNYR
 					</Link>
 					<Badge

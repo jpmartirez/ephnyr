@@ -7,6 +7,8 @@ import { signout } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+import Image from "next/image";
+
 interface DashboardSidebarProps {
 	userEmail?: string;
 	activeRooms?: number;
@@ -55,9 +57,13 @@ export function DashboardSidebar({
 						onClick={onClose}
 						className="flex items-center gap-2 text-lg font-bold tracking-tighter text-zinc-950"
 					>
-						<span className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-950 text-xs font-bold text-white">
-							E
-						</span>
+						<Image
+							src="/EphnyrLogo.png"
+							alt="Ephnyr Logo"
+							width={28}
+							height={28}
+							className="h-7 w-auto object-contain"
+						/>
 						EPHNYR
 					</Link>
 					<div className="flex items-center gap-2">

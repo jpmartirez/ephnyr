@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +20,14 @@ export function ChatPrivateScreen() {
 	return (
 		<div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 font-sans selection:bg-zinc-900 selection:text-white">
 			<Card className="w-full max-w-md border-zinc-200 bg-white p-6 shadow-md text-center">
-				<CardHeader className="p-0 text-center">
+				<CardHeader className="p-0 text-center flex flex-col items-center">
+					<Image
+						src="/EphnyrLogo.png"
+						alt="Ephnyr Logo"
+						width={36}
+						height={36}
+						className="mx-auto mb-2 h-9 w-auto object-contain"
+					/>
 					<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-900">
 						<Lock className="h-6 w-6" />
 					</div>

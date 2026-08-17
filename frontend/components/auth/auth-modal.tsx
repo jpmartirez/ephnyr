@@ -2,6 +2,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
+import Image from "next/image";
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import toast from "react-hot-toast";
 import { login, signup } from "@/actions/auth";
@@ -91,9 +92,13 @@ export function AuthModal({
 			<DialogContent className="max-w-md border-zinc-200 bg-white p-6 shadow-lg sm:max-w-md">
 				<DialogHeader className="flex flex-col items-center text-center">
 					<div className="flex items-center gap-2 text-xl font-bold tracking-tighter text-zinc-950">
-						<span className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-950 text-sm font-bold text-white">
-							E
-						</span>
+						<Image
+							src="/EphnyrLogo.png"
+							alt="Ephnyr Logo"
+							width={32}
+							height={32}
+							className="h-8 w-auto object-contain"
+						/>
 						EPHNYR
 					</div>
 					<DialogTitle className="mt-2 text-lg font-bold text-zinc-950">

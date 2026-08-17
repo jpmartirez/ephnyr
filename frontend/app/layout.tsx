@@ -13,6 +13,9 @@ export const metadata: Metadata = {
 	title: "Ephnyr — Ephemeral Knowledge Pods & RAG Workspaces",
 	description:
 		"Multi-tenant RAG platform powered by Supabase pgvector and Groq LPU engine. Ultra-low latency query responses with atomic zero-trace teardown.",
+	icons: {
+		icon: "/EphnyrLogo.png",
+	},
 };
 
 export default function RootLayout({
