@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Globe, Lock, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronDown, Globe, Lock, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -15,28 +15,50 @@ import { Input } from "@/components/ui/input";
 interface CreateRoomModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onSubmitPreview?: (name: string, description: string) => void;
+	onCreateRoom?: (payload: {
+		name: string;
+		description: string;
+		is_public: boolean;
+		system_prompt: string;
+	}) => Promise<boolean>;
 }
 
 export function CreateRoomModal({
 	open,
 	onOpenChange,
-	onSubmitPreview,
+	onCreateRoom,
 }: CreateRoomModalProps) {
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [isPublic, setIsPublic] = useState(true);
+	const [showAdvanced, setShowAdvanced] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [systemPrompt, setSystemPrompt] = useState(
 		"You are an AI assistant strictly grounded on the provided context."
 	);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!name.trim()) return;
-		onSubmitPreview?.(name, description);
-		setName("");
-		setDescription("");
-		onOpenChange(false);
+		if (!name.trim() || isSubmitting) return;
+
+		setIsSubmitting(true);
+		try {
+			const success = await onCreateRoom?.({
+				name: name.trim(),
+				description: description.trim(),
+				is_public: isPublic,
+				system_prompt: systemPrompt.trim(),
+			});
+
+			if (success !== false) {
+				setName("");
+				setDescription("");
+				setShowAdvanced(false);
+				onOpenChange(false);
+			}
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -87,22 +109,6 @@ export function CreateRoomModal({
 						/>
 					</div>
 
-					<div className="space-y-1.5">
-						<label htmlFor="system-prompt" className="text-xs font-medium text-zinc-700">
-							System Grounding Prompt
-						</label>
-						<Input
-							id="system-prompt"
-							type="text"
-							value={systemPrompt}
-							onChange={(e) => setSystemPrompt(e.target.value)}
-							className="border-zinc-200 text-xs"
-						/>
-						<p className="text-[10px] text-zinc-400">
-							Directs LLM response behavior during similarity RAG queries.
-						</p>
-					</div>
-
 					<div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3">
 						<div className="flex items-center justify-between">
 							<div className="flex items-center gap-2">
@@ -134,12 +140,51 @@ export function CreateRoomModal({
 						</div>
 					</div>
 
+					{/* Optional Advanced Settings Accordion */}
+					<div className="pt-1">
+						<button
+							type="button"
+							onClick={() => setShowAdvanced(!showAdvanced)}
+							className="flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-950 transition-colors"
+						>
+							<Settings2 className="h-3.5 w-3.5" />
+							<span>Advanced Settings</span>
+							<ChevronDown
+								className={`h-3.5 w-3.5 transition-transform ${
+									showAdvanced ? "rotate-180" : ""
+								}`}
+							/>
+						</button>
+
+						{showAdvanced && (
+							<div className="mt-3 space-y-1.5 rounded-lg border border-zinc-200 bg-zinc-50/60 p-3">
+								<label
+									htmlFor="system-prompt"
+									className="text-xs font-medium text-zinc-700"
+								>
+									System Grounding Prompt
+								</label>
+								<Input
+									id="system-prompt"
+									type="text"
+									value={systemPrompt}
+									onChange={(e) => setSystemPrompt(e.target.value)}
+									className="border-zinc-200 text-xs bg-white"
+								/>
+								<p className="text-[10px] text-zinc-400">
+									Directs LLM response behavior during RAG similarity queries.
+								</p>
+							</div>
+						)}
+					</div>
+
 					<div className="flex items-center justify-end gap-3 pt-2">
 						<Button
 							type="button"
 							variant="ghost"
 							size="sm"
 							onClick={() => onOpenChange(false)}
+							disabled={isSubmitting}
 							className="text-xs font-medium text-zinc-600 hover:bg-zinc-100"
 						>
 							Cancel
@@ -147,9 +192,11 @@ export function CreateRoomModal({
 						<Button
 							type="submit"
 							size="sm"
+							disabled={isSubmitting}
 							className="bg-zinc-950 text-xs font-medium text-white shadow-xs hover:bg-zinc-800"
 						>
-							Create Pod <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+							{isSubmitting ? "Creating Pod..." : "Create Pod"}
+							<ArrowRight className="ml-1.5 h-3.5 w-3.5" />
 						</Button>
 					</div>
 				</form>

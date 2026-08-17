@@ -32,6 +32,12 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
+-- Backfill existing auth.users into public.users if missing
+INSERT INTO public.users (id, email, full_name)
+SELECT id, email, raw_user_meta_data->>'full_name'
+FROM auth.users
+ON CONFLICT (id) DO NOTHING;
+
 -- 2. Rooms Table
 CREATE TABLE IF NOT EXISTS public.rooms (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -146,5 +152,33 @@ DO $$ BEGIN
     ON public.documents FOR ALL USING (
       EXISTS (SELECT 1 FROM public.rooms WHERE rooms.id = documents.room_id AND rooms.user_id = auth.uid())
     );
+  END IF;
+END $$;
+
+-- 8. Storage Bucket & RLS Policies for 'room-documents'
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('room-documents', 'room-documents', true)
+ON CONFLICT (id) DO NOTHING;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Authenticated users can upload room documents') THEN
+    CREATE POLICY "Authenticated users can upload room documents"
+    ON storage.objects FOR INSERT
+    TO authenticated
+    WITH CHECK (bucket_id = 'room-documents');
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Authenticated users can view room documents') THEN
+    CREATE POLICY "Authenticated users can view room documents"
+    ON storage.objects FOR SELECT
+    TO authenticated
+    USING (bucket_id = 'room-documents');
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Authenticated users can delete room documents') THEN
+    CREATE POLICY "Authenticated users can delete room documents"
+    ON storage.objects FOR DELETE
+    TO authenticated
+    USING (bucket_id = 'room-documents');
   END IF;
 END $$;

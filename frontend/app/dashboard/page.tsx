@@ -1,7 +1,11 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { Plus, Search, FolderPlus } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { Plus, Search, FolderPlus, RefreshCw } from "lucide-react";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,41 +16,76 @@ import {
 	useDashboard,
 	type RoomItem,
 } from "@/components/dashboard";
-
-const INITIAL_ROOMS: RoomItem[] = [
-	{
-		id: "room-1",
-		name: "Quantum RAG Research",
-		description:
-			"Benchmarking vector cosine lookups using pgvector HNSW index against Llama 3.3 70B.",
-		slug: "quantum-rag-research",
-		is_public: true,
-		docCount: 3,
-		created_at: "Today at 2:15 PM",
-	},
-];
+import { getUserRooms, createRoom, deleteRoom } from "@/actions/rooms";
 
 export default function DashboardPage() {
-	const { toggleMobileSidebar } = useDashboard();
-	const [rooms, setRooms] = useState<RoomItem[]>(INITIAL_ROOMS);
+	const router = useRouter();
+	const { toggleMobileSidebar, setActiveRooms } = useDashboard();
+	const [rooms, setRooms] = useState<RoomItem[]>([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
-	const handleCreateRoom = (name: string, description: string) => {
-		const newRoom: RoomItem = {
-			id: `room-${Date.now()}`,
-			name,
-			description,
-			slug: name.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-") + "-pod",
-			is_public: true,
-			docCount: 0,
-			created_at: "Just now",
-		};
-		setRooms([newRoom, ...rooms]);
+	const fetchRooms = useCallback(async () => {
+		setIsLoading(true);
+		try {
+			const res = await getUserRooms();
+			if (res.success) {
+				const mapped: RoomItem[] = (res.rooms || []).map((r) => ({
+					id: r.id,
+					name: r.name,
+					description: r.description || "",
+					slug: r.slug,
+					is_public: r.is_public ?? true,
+					docCount: r.docCount ?? (r as any).doc_count ?? 0,
+					created_at: r.created_at ? new Date(r.created_at).toLocaleDateString() : "Recently",
+				}));
+				setRooms(mapped);
+				setActiveRooms(mapped.length);
+			} else if (res.error) {
+				toast.error(res.error);
+			}
+		} catch (e: any) {
+			console.error("Failed to load rooms:", e);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [setActiveRooms]);
+
+	useEffect(() => {
+		fetchRooms();
+	}, [fetchRooms]);
+
+	const handleCreateRoom = async (payload: {
+		name: string;
+		description: string;
+		is_public: boolean;
+		system_prompt: string;
+	}): Promise<boolean> => {
+		toast.loading("Creating Knowledge Pod...", { id: "create-room" });
+		const result = await createRoom(payload);
+
+		if (!result.success) {
+			toast.error(result.error || "Failed to create room.", { id: "create-room" });
+			return false;
+		}
+
+		toast.success("Knowledge Pod created successfully!", { id: "create-room" });
+		await fetchRooms();
+		return true;
 	};
 
-	const handleDeleteRoom = (id: string) => {
-		setRooms(rooms.filter((r) => r.id !== id));
+	const handleDeleteRoom = async (id: string) => {
+		toast.loading("Purging Knowledge Pod...", { id: "delete-room" });
+		const result = await deleteRoom(id);
+
+		if (!result.success) {
+			toast.error(result.error || "Failed to delete room.", { id: "delete-room" });
+			return;
+		}
+
+		toast.success("Knowledge Pod purged successfully!", { id: "delete-room" });
+		await fetchRooms();
 	};
 
 	const filteredRooms = rooms.filter(
@@ -83,25 +122,46 @@ export default function DashboardPage() {
 						/>
 					</div>
 
-					<div className="flex items-center justify-between sm:justify-end gap-2 text-xs text-zinc-500 font-medium">
+					<div className="flex items-center justify-between sm:justify-end gap-3 text-xs text-zinc-500 font-medium">
 						<span>Showing {filteredRooms.length} of {rooms.length} Pods</span>
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={fetchRooms}
+							disabled={isLoading}
+							className="h-8 w-8 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950"
+							title="Refresh Rooms"
+						>
+							<RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
+						</Button>
 					</div>
 				</div>
 
-				{/* Room Cards Grid */}
-				{filteredRooms.length > 0 ? (
+				{/* Room Cards Grid or Empty State */}
+				{isLoading ? (
+					/* Loading Skeleton State */
+					<div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+						{[1, 2].map((i) => (
+							<div
+								key={i}
+								className="h-44 animate-pulse rounded-xl border border-zinc-200 bg-zinc-100/60"
+							/>
+						))}
+					</div>
+				) : filteredRooms.length > 0 ? (
+					/* Active Rooms Grid */
 					<div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
 						{filteredRooms.map((room) => (
 							<RoomCard
 								key={room.id}
 								room={room}
 								onDelete={handleDeleteRoom}
-								onOpen={(r) => console.log("Open room:", r.name)}
+								onOpen={(r) => router.push(`/dashboard/room/${r.id}`)}
 							/>
 						))}
 					</div>
 				) : (
-					/* Empty State */
+					/* Empty State - No fetches if 0 rooms */
 					<div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-white p-8 sm:p-12 text-center">
 						<div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-600">
 							<FolderPlus className="h-6 w-6" />
@@ -132,7 +192,7 @@ export default function DashboardPage() {
 			<CreateRoomModal
 				open={isCreateModalOpen}
 				onOpenChange={setIsCreateModalOpen}
-				onSubmitPreview={handleCreateRoom}
+				onCreateRoom={handleCreateRoom}
 			/>
 		</div>
 	);

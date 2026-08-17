@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 
 interface DashboardSidebarProps {
 	userEmail?: string;
+	activeRooms?: number;
+	maxRooms?: number;
 	onOpenCreateModal?: () => void;
 	isOpen?: boolean;
 	onClose?: () => void;
@@ -16,6 +18,8 @@ interface DashboardSidebarProps {
 
 export function DashboardSidebar({
 	userEmail = "user@ephnyr.ai",
+	activeRooms = 0,
+	maxRooms = 3,
 	onOpenCreateModal,
 	isOpen = false,
 	onClose,
@@ -24,6 +28,9 @@ export function DashboardSidebar({
 
 	const isRoomsActive = pathname === "/dashboard" || pathname === "/dashboard/rooms";
 	const isPricingActive = pathname === "/dashboard/pricing";
+
+	const remaining = Math.max(0, maxRooms - activeRooms);
+	const percentage = Math.min(100, Math.max(0, (activeRooms / maxRooms) * 100));
 
 	return (
 		<>
@@ -116,13 +123,20 @@ export function DashboardSidebar({
 				<div className="m-3 rounded-lg border border-zinc-200 bg-zinc-50/70 p-3">
 					<div className="flex items-center justify-between text-xs">
 						<span className="font-semibold text-zinc-700">Room Quota</span>
-						<span className="font-bold text-zinc-950">1 / 3</span>
+						<span className="font-bold text-zinc-950">{activeRooms} / {maxRooms}</span>
 					</div>
 					<div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-zinc-200">
-						<div className="h-full bg-zinc-900" style={{ width: "33%" }}></div>
+						<div
+							className={`h-full transition-all ${
+								activeRooms >= maxRooms ? "bg-amber-500" : "bg-zinc-900"
+							}`}
+							style={{ width: `${percentage}%` }}
+						/>
 					</div>
-					<p className="mt-2 text-[10px] text-zinc-500">
-						2 rooms remaining on Free Tier.
+					<p className="mt-2 text-[10px] font-medium text-zinc-500">
+						{activeRooms >= maxRooms
+							? "Max quota reached on Free Tier."
+							: `${remaining} room${remaining === 1 ? "" : "s"} remaining on Free Tier.`}
 					</p>
 				</div>
 
