@@ -15,6 +15,10 @@ class Settings(BaseModel):
     SUPABASE_SERVICE_ROLE_KEY: str = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
     SUPABASE_JWT_SECRET: str = os.getenv("SUPABASE_JWT_SECRET", "")
     
+    # Groq Settings
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
+    
     # Frontend URL for CORS
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
     

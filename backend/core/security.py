@@ -27,3 +27,27 @@ async def get_current_user(authorization: Optional[str] = Header(None)) -> dict:
         }
     except Exception as e:
         raise UnauthorizedException(f"Authentication failed: {str(e)}")
+
+async def get_optional_current_user(authorization: Optional[str] = Header(None)) -> Optional[dict]:
+    """
+    Optional authentication dependency. Returns user payload if valid Bearer token provided, else None.
+    """
+    if not authorization or not authorization.startswith("Bearer "):
+        return None
+    
+    token = authorization.split(" ")[1]
+    supabase_admin = get_supabase_admin()
+    
+    try:
+        response = supabase_admin.auth.get_user(token)
+        if response and response.user:
+            user = response.user
+            return {
+                "id": user.id,
+                "email": user.email,
+                "user_metadata": user.user_metadata or {}
+            }
+    except Exception:
+        pass
+    
+    return None
