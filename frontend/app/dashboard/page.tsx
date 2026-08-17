@@ -53,17 +53,23 @@ export default function DashboardPage() {
 		fetchRooms();
 	}, [fetchRooms]);
 
-	const handleCreateRoom = async (name: string, description: string) => {
+	const handleCreateRoom = async (payload: {
+		name: string;
+		description: string;
+		is_public: boolean;
+		system_prompt: string;
+	}): Promise<boolean> => {
 		toast.loading("Creating Knowledge Pod...", { id: "create-room" });
-		const result = await createRoom({ name, description });
+		const result = await createRoom(payload);
 
 		if (!result.success) {
 			toast.error(result.error || "Failed to create room.", { id: "create-room" });
-			return;
+			return false;
 		}
 
 		toast.success("Knowledge Pod created successfully!", { id: "create-room" });
 		await fetchRooms();
+		return true;
 	};
 
 	const handleDeleteRoom = async (id: string) => {
@@ -183,7 +189,7 @@ export default function DashboardPage() {
 			<CreateRoomModal
 				open={isCreateModalOpen}
 				onOpenChange={setIsCreateModalOpen}
-				onSubmitPreview={handleCreateRoom}
+				onCreateRoom={handleCreateRoom}
 			/>
 		</div>
 	);

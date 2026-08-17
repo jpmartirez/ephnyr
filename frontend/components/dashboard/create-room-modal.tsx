@@ -15,30 +15,50 @@ import { Input } from "@/components/ui/input";
 interface CreateRoomModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onSubmitPreview?: (name: string, description: string) => void;
+	onCreateRoom?: (payload: {
+		name: string;
+		description: string;
+		is_public: boolean;
+		system_prompt: string;
+	}) => Promise<boolean>;
 }
 
 export function CreateRoomModal({
 	open,
 	onOpenChange,
-	onSubmitPreview,
+	onCreateRoom,
 }: CreateRoomModalProps) {
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [isPublic, setIsPublic] = useState(true);
 	const [showAdvanced, setShowAdvanced] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [systemPrompt, setSystemPrompt] = useState(
 		"You are an AI assistant strictly grounded on the provided context."
 	);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!name.trim()) return;
-		onSubmitPreview?.(name, description);
-		setName("");
-		setDescription("");
-		setShowAdvanced(false);
-		onOpenChange(false);
+		if (!name.trim() || isSubmitting) return;
+
+		setIsSubmitting(true);
+		try {
+			const success = await onCreateRoom?.({
+				name: name.trim(),
+				description: description.trim(),
+				is_public: isPublic,
+				system_prompt: systemPrompt.trim(),
+			});
+
+			if (success !== false) {
+				setName("");
+				setDescription("");
+				setShowAdvanced(false);
+				onOpenChange(false);
+			}
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -164,6 +184,7 @@ export function CreateRoomModal({
 							variant="ghost"
 							size="sm"
 							onClick={() => onOpenChange(false)}
+							disabled={isSubmitting}
 							className="text-xs font-medium text-zinc-600 hover:bg-zinc-100"
 						>
 							Cancel
@@ -171,9 +192,11 @@ export function CreateRoomModal({
 						<Button
 							type="submit"
 							size="sm"
+							disabled={isSubmitting}
 							className="bg-zinc-950 text-xs font-medium text-white shadow-xs hover:bg-zinc-800"
 						>
-							Create Pod <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+							{isSubmitting ? "Creating Pod..." : "Create Pod"}
+							<ArrowRight className="ml-1.5 h-3.5 w-3.5" />
 						</Button>
 					</div>
 				</form>

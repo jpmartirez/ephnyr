@@ -17,6 +17,22 @@ class RoomService:
         self.supabase = get_supabase_admin()
 
     async def create_room(self, user_id: str, room_in: RoomCreate) -> RoomResponse:
+        # 0. Ensure user record exists in public.users to prevent rooms_user_id_fkey violation
+        user_check = self.supabase.table("users").select("id").eq("id", user_id).execute()
+        if not user_check.data:
+            try:
+                auth_user = self.supabase.auth.admin.get_user_by_id(user_id)
+                if auth_user and auth_user.user:
+                    email = auth_user.user.email or f"{user_id}@ephnyr.ai"
+                    full_name = (auth_user.user.user_metadata or {}).get("full_name", "")
+                    self.supabase.table("users").upsert({
+                        "id": user_id,
+                        "email": email,
+                        "full_name": full_name
+                    }).execute()
+            except Exception as e:
+                print("Failed to auto-sync user profile into public.users:", e)
+
         # 1. Enforce Max 3 Rooms on Free Tier (Masterplan Quota Rule 1.1 & 7.2)
         count_response = self.supabase.table("rooms").select("id", count="exact").eq("user_id", user_id).execute()
         current_room_count = count_response.count or 0

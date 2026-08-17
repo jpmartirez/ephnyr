@@ -144,6 +144,18 @@ export async function createRoom(payload: {
 		const { data: user } = await supabase.auth.getUser();
 		if (!user.user) return { success: false, error: "User not found." };
 
+		// Ensure public.users row exists before inserting into rooms
+		if (user.user.email) {
+			await supabase.from("users").upsert(
+				{
+					id: user.user.id,
+					email: user.user.email,
+					full_name: user.user.user_metadata?.full_name || "",
+				},
+				{ onConflict: "id" }
+			);
+		}
+
 		const { count } = await supabase
 			.from("rooms")
 			.select("*", { count: "exact", head: true })
